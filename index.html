@@ -215,15 +215,22 @@ a:hover{text-decoration:underline}
 .builder-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
 .builder-card.open .builder-body{max-height:3000px}
 .builder-body-inner{padding:0 2rem 1.5rem}
-.builder-topbar{display:flex;align-items:center;justify-content:flex-start;
-  margin-bottom:.75rem}
-.builder-progress{font-size:.72rem;color:var(--text3);letter-spacing:.3px}
-.builder-progress .filled-count{color:var(--accent2);font-weight:600}
+.builder-prompt-wrap{position:relative;margin-bottom:.75rem}
+.builder-copy-btn{position:absolute;top:.75rem;right:.75rem;z-index:2;
+  font-size:.72rem;padding:.35rem .85rem;border-radius:16px;
+  background:rgba(167,139,250,.15);backdrop-filter:blur(8px);
+  border:1px solid rgba(167,139,250,.3);color:var(--accent2);cursor:pointer;
+  font-family:var(--font);font-weight:600;transition:var(--transition);
+  display:inline-flex;align-items:center;gap:5px}
+.builder-copy-btn:hover{background:rgba(167,139,250,.3);border-color:rgba(167,139,250,.5);
+  transform:translateY(-1px)}
+.builder-copy-btn.copied{background:rgba(34,197,94,.2);color:#22c55e;
+  border-color:rgba(34,197,94,.4)}
 .builder-prompt{background:rgba(12,14,24,.95);border:1px solid var(--glass-border);
   border-radius:var(--radius-sm);padding:1.25rem 1.5rem;
   font-family:'SF Mono',Monaco,Consolas,'Courier New',monospace;font-size:.76rem;
   color:var(--text2);line-height:1.7;white-space:pre-wrap;word-break:break-word;
-  max-height:800px;overflow-y:auto;text-transform:none;margin-bottom:1rem;
+  max-height:800px;overflow-y:auto;text-transform:none;
   scrollbar-width:thin;scrollbar-color:rgba(167,139,250,.2) transparent}
 [data-theme="light"] .builder-prompt{background:rgba(30,41,59,.95);color:#cbd5e1}
 .builder-prompt::-webkit-scrollbar{width:4px}
@@ -234,25 +241,35 @@ a:hover{text-decoration:underline}
 .builder-prompt .string{color:#6ee7b7}
 .builder-prompt .variable{color:#fbbf24}
 .builder-prompt .operator{color:#f472b6}
-.builder-blank-wrap{display:block;margin:.5rem 0;padding:.65rem .85rem;
-  background:rgba(167,139,250,.05);border-radius:10px;
-  border-left:3px solid rgba(167,139,250,.35)}
-.builder-blank-label{display:block;font-family:var(--font);font-size:.68rem;
-  font-weight:600;letter-spacing:.5px;color:var(--accent2);margin-bottom:.3rem;
-  text-transform:uppercase}
-.builder-blank{display:block;width:100%;padding:.55rem .75rem;
-  background:rgba(167,139,250,.1);border:1px dashed rgba(167,139,250,.4);
-  border-radius:8px;color:var(--accent2);font-family:var(--font);font-size:.82rem;
-  outline:none;transition:var(--transition);cursor:text;line-height:1.6;
-  min-height:3.2em;white-space:pre-wrap;word-break:break-word}
-.builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.35);
+.builder-blank-wrap{display:block;margin:.75rem 0;padding:.85rem 1rem;
+  background:rgba(167,139,250,.06);border-radius:12px;
+  border:1px solid rgba(167,139,250,.15)}
+.builder-blank-label{display:flex;align-items:center;justify-content:space-between;
+  font-family:var(--font);font-size:.7rem;font-weight:600;letter-spacing:.5px;
+  color:var(--accent2);margin-bottom:.4rem;text-transform:uppercase}
+.builder-blank-hint{font-size:.68rem;color:var(--text);font-weight:400;
+  letter-spacing:0;text-transform:none;font-style:italic;opacity:.6}
+.builder-blank{display:block;width:100%;padding:.7rem .9rem;
+  background:rgba(167,139,250,.08);border:1.5px dashed rgba(167,139,250,.35);
+  border-radius:10px;color:var(--accent2);font-family:var(--font);font-size:.85rem;
+  outline:none;transition:var(--transition);cursor:text;line-height:1.65;
+  min-height:4.5em;white-space:pre-wrap;word-break:break-word}
+.builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.3);
   font-style:italic;pointer-events:none}
 .builder-blank:focus{border-style:solid;border-color:var(--accent2);
-  background:rgba(167,139,250,.18);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
-.builder-blank.filled{border-style:solid;border-color:rgba(34,197,94,.35);
-  background:rgba(34,197,94,.08);color:#e2e8f0}
-.builder-blank-hint{display:block;font-family:var(--font);font-size:.7rem;
-  color:var(--text);margin-top:.3rem;opacity:.7}
+  background:rgba(167,139,250,.14);box-shadow:0 0 0 3px rgba(167,139,250,.1)}
+.builder-blank.filled{border-style:solid;border-color:rgba(34,197,94,.3);
+  background:rgba(34,197,94,.06);color:#e2e8f0}
+.builder-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem}
+.builder-chip{font-size:.67rem;padding:.2rem .55rem;border-radius:12px;
+  background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.15);
+  color:var(--text3);cursor:pointer;font-family:var(--font);
+  transition:var(--transition);white-space:nowrap}
+.builder-chip:hover{border-color:rgba(167,139,250,.4);color:var(--accent2);
+  background:rgba(167,139,250,.12)}
+.builder-progress-bar{text-align:center;padding:.6rem 0;font-size:.75rem;
+  color:var(--text3);letter-spacing:.3px}
+.builder-progress-bar .filled-count{color:var(--accent2);font-weight:600}
 .builder-bottom{display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:.5rem}
 .builder-bottom-left{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
@@ -264,12 +281,6 @@ a:hover{text-decoration:underline}
   transition:var(--transition);white-space:nowrap}
 .builder-example-btn:hover{border-color:rgba(167,139,250,.35);color:var(--accent2);
   background:rgba(167,139,250,.1)}
-.builder-copy-btn{font-size:.75rem;padding:.4rem .9rem;border-radius:16px;
-  background:var(--accent);border:none;color:#fff;cursor:pointer;
-  font-family:var(--font);font-weight:600;transition:var(--transition);
-  display:inline-flex;align-items:center;gap:5px}
-.builder-copy-btn:hover{background:var(--accent2);transform:translateY(-1px)}
-.builder-copy-btn.copied{background:#22c55e}
 .builder-reset-btn{font-size:.75rem;padding:.4rem .9rem;border-radius:16px;
   background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;
   cursor:pointer;font-family:var(--font);font-weight:600;transition:var(--transition);
@@ -455,6 +466,7 @@ footer a{color:var(--accent2)}
   .builder-bottom-left,.builder-bottom-right{justify-content:center}
   .builder-examples-label{display:none}
   .builder-blank{min-width:100px}
+  .builder-copy-btn{font-size:.65rem;padding:.3rem .65rem}
   .modal{padding:1.25rem;max-height:90vh}
 }
 @media(max-width:480px){
@@ -552,10 +564,11 @@ footer a{color:var(--accent2)}
     </button>
     <div class="builder-body">
       <div class="builder-body-inner">
-        <div class="builder-topbar">
-          <span class="builder-progress"><span class="filled-count" id="builder-filled">0</span> of 4 filled</span>
+        <div class="builder-prompt-wrap">
+          <button class="builder-copy-btn" id="builder-copy">&#x1F4CB; copy your prompt</button>
+          <div class="builder-prompt" id="builder-prompt"></div>
         </div>
-        <div class="builder-prompt" id="builder-prompt"></div>
+        <div class="builder-progress-bar"><span class="filled-count" id="builder-filled">0</span> of 4 filled</div>
         <div class="builder-bottom">
           <div class="builder-bottom-left">
             <span class="builder-examples-label">quick examples:</span>
@@ -565,7 +578,6 @@ footer a{color:var(--accent2)}
           </div>
           <div class="builder-bottom-right">
             <button class="builder-reset-btn" id="builder-reset">&#x21bb; reset</button>
-            <button class="builder-copy-btn" id="builder-copy">&#x1F4CB; copy your prompt</button>
           </div>
         </div>
       </div>
@@ -2350,17 +2362,21 @@ const BUILDER_EXAMPLES={
 };
 const BUILDER_BLANKS=[
   {key:'topic',original:'{{topic/project}}',label:'topic / project',
-    placeholder:'e.g., customer feedback analysis',
-    hint:'what are you working on or trying to explore?'},
+    placeholder:'describe your topic or project...',
+    hint:'what are you working on?',
+    chips:['survey analysis','program evaluation','competitor research','content strategy','process improvement','user feedback']},
   {key:'outcome',original:'{{specific outcome}}',label:'desired outcome',
-    placeholder:'e.g., identify top 3 pain points with evidence',
-    hint:'what specific deliverable do you need?'},
+    placeholder:'what specific deliverable do you need?',
+    hint:'what does done look like?',
+    chips:['executive summary','action plan','ranked recommendations','comparison table','gap analysis','decision framework']},
   {key:'audience',original:'{{audience or downstream use}}',label:'audience',
-    placeholder:'e.g., product team for sprint planning',
-    hint:'who will read or use the output?'},
+    placeholder:'who will read or use the output?',
+    hint:'who is this for?',
+    chips:['leadership team','product team','clients','board of directors','cross-functional team','external partners']},
   {key:'constraints',original:'{{deadlines, tone, format, tools, length, etc.}}',label:'constraints',
-    placeholder:'e.g., under 2 pages, actionable recommendations',
-    hint:'any limits on length, tone, format, or tools?'}
+    placeholder:'any limits on length, tone, format, or tools?',
+    hint:'what are the boundaries?',
+    chips:['under 1 page','formal tone','bullet points','data-backed','no jargon','include examples','actionable']}
 ];
 function buildPromptHTML(){
   let raw=FULL_PROMPTS['expert-prompt-gen']||'';
@@ -2375,11 +2391,12 @@ function buildPromptHTML(){
   let html=highlightSyntax(raw);
   // Replace markers with block-level editable blank areas
   Object.entries(markers).forEach(([marker,b])=>{
+    const chips=(b.chips||[]).map(c=>`<span class="builder-chip" data-key="${b.key}">${c}</span>`).join('');
     html=html.replace(marker,
       `<span class="builder-blank-wrap">`+
-      `<span class="builder-blank-label">${b.label}</span>`+
+      `<span class="builder-blank-label">${b.label}<span class="builder-blank-hint">${b.hint}</span></span>`+
       `<span class="builder-blank" contenteditable="true" data-key="${b.key}" data-placeholder="${b.placeholder}"></span>`+
-      `<span class="builder-blank-hint">${b.hint}</span>`+
+      `<span class="builder-chips">${chips}</span>`+
       `</span>`);
   });
   return html;
@@ -2413,6 +2430,18 @@ function initPromptBuilder(){
     b.addEventListener('input',updateProgress);
     b.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();b.blur();}});
     b.addEventListener('click',e=>e.stopPropagation());
+  });
+  // Chip click — append to the matching blank
+  document.querySelectorAll('.builder-chip').forEach(chip=>{
+    chip.addEventListener('click',e=>{
+      e.stopPropagation();
+      const key=chip.dataset.key;
+      const blank=[...blanks].find(b=>b.dataset.key===key);
+      if(!blank)return;
+      const cur=blank.textContent.trim();
+      blank.textContent=cur?(cur+', '+chip.textContent):chip.textContent;
+      updateProgress();
+    });
   });
   document.querySelectorAll('.builder-example-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
