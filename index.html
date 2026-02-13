@@ -200,25 +200,30 @@ a:hover{text-decoration:underline}
 .builder-card{background:var(--glass);backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);
   border-radius:var(--radius);overflow:hidden}
-.builder-toggle{display:flex;align-items:center;justify-content:space-between;
+.builder-toggle{display:flex;flex-direction:column;align-items:center;
   width:100%;padding:1.1rem 1.5rem;background:none;border:none;cursor:pointer;
-  font-family:var(--font);color:var(--text);transition:var(--transition)}
+  font-family:var(--font);color:var(--text);transition:var(--transition);
+  gap:.25rem;position:relative}
 .builder-toggle:hover{background:rgba(167,139,250,.04)}
-.builder-toggle-left{display:flex;align-items:center;gap:.5rem}
-.builder-toggle-left h2{font-size:1rem;font-weight:600;margin:0}
-.builder-toggle-left .builder-icon{font-size:1.1rem}
-.builder-toggle-sub{font-size:.72rem;color:var(--text3);font-weight:400;margin-left:.25rem}
-.builder-chevron{font-size:.7rem;color:var(--text3);transition:transform .3s ease;
-  display:inline-block}
-.builder-card.open .builder-chevron{transform:rotate(180deg)}
+.builder-toggle h2{font-size:1.05rem;font-weight:600;margin:0;display:flex;
+  align-items:center;gap:.4rem}
+.builder-toggle h2 .builder-icon{font-size:1.1rem}
+.builder-toggle-sub{font-size:.72rem;color:var(--text3);font-weight:400}
+.builder-chevron{position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);
+  font-size:.7rem;color:var(--text3);transition:transform .3s ease}
+.builder-card.open .builder-chevron{transform:translateY(-50%) rotate(180deg)}
 .builder-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.4,0,.2,1)}
-.builder-card.open .builder-body{max-height:2000px}
+.builder-card.open .builder-body{max-height:3000px}
 .builder-body-inner{padding:0 2rem 1.5rem}
+.builder-topbar{display:flex;align-items:center;justify-content:flex-start;
+  margin-bottom:.75rem}
+.builder-progress{font-size:.72rem;color:var(--text3);letter-spacing:.3px}
+.builder-progress .filled-count{color:var(--accent2);font-weight:600}
 .builder-prompt{background:rgba(12,14,24,.95);border:1px solid var(--glass-border);
   border-radius:var(--radius-sm);padding:1.25rem 1.5rem;
   font-family:'SF Mono',Monaco,Consolas,'Courier New',monospace;font-size:.76rem;
   color:var(--text2);line-height:1.7;white-space:pre-wrap;word-break:break-word;
-  max-height:800px;overflow-y:auto;text-transform:none;margin-bottom:1.25rem;
+  max-height:800px;overflow-y:auto;text-transform:none;margin-bottom:1rem;
   scrollbar-width:thin;scrollbar-color:rgba(167,139,250,.2) transparent}
 [data-theme="light"] .builder-prompt{background:rgba(30,41,59,.95);color:#cbd5e1}
 .builder-prompt::-webkit-scrollbar{width:4px}
@@ -229,17 +234,17 @@ a:hover{text-decoration:underline}
 .builder-prompt .string{color:#6ee7b7}
 .builder-prompt .variable{color:#fbbf24}
 .builder-prompt .operator{color:#f472b6}
-.builder-blank-wrap{display:block;margin:1rem 0;padding:.85rem 1rem;
+.builder-blank-wrap{display:block;margin:.5rem 0;padding:.65rem .85rem;
   background:rgba(167,139,250,.05);border-radius:10px;
   border-left:3px solid rgba(167,139,250,.35)}
 .builder-blank-label{display:block;font-family:var(--font);font-size:.68rem;
-  font-weight:600;letter-spacing:.5px;color:var(--accent2);margin-bottom:.4rem;
+  font-weight:600;letter-spacing:.5px;color:var(--accent2);margin-bottom:.3rem;
   text-transform:uppercase}
 .builder-blank{display:block;width:100%;padding:.55rem .75rem;
   background:rgba(167,139,250,.1);border:1px dashed rgba(167,139,250,.4);
   border-radius:8px;color:var(--accent2);font-family:var(--font);font-size:.82rem;
   outline:none;transition:var(--transition);cursor:text;line-height:1.6;
-  min-height:3.6em;white-space:pre-wrap;word-break:break-word}
+  min-height:3.2em;white-space:pre-wrap;word-break:break-word}
 .builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.35);
   font-style:italic;pointer-events:none}
 .builder-blank:focus{border-style:solid;border-color:var(--accent2);
@@ -247,12 +252,12 @@ a:hover{text-decoration:underline}
 .builder-blank.filled{border-style:solid;border-color:rgba(34,197,94,.35);
   background:rgba(34,197,94,.08);color:#e2e8f0}
 .builder-blank-hint{display:block;font-family:var(--font);font-size:.7rem;
-  color:var(--text);margin-top:.4rem;opacity:.7}
+  color:var(--text);margin-top:.3rem;opacity:.7}
 .builder-bottom{display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:.75rem}
-.builder-progress{font-size:.72rem;color:var(--text3);letter-spacing:.3px}
-.builder-progress .filled-count{color:var(--accent2);font-weight:600}
-.builder-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+  flex-wrap:wrap;gap:.5rem}
+.builder-bottom-left{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.builder-examples-label{font-size:.72rem;color:var(--text3);white-space:nowrap}
+.builder-bottom-right{display:flex;gap:.5rem;align-items:center}
 .builder-example-btn{font-size:.72rem;padding:.3rem .7rem;border-radius:16px;
   background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.15);
   color:var(--text2);cursor:pointer;font-family:var(--font);
@@ -446,8 +451,9 @@ footer a{color:var(--accent2)}
   .builder-body-inner{padding:0 1rem 1rem}
   .builder-toggle{padding:1rem}
   .builder-toggle-sub{display:none}
-  .builder-bottom{flex-direction:column;align-items:center}
-  .builder-actions{justify-content:center}
+  .builder-bottom{flex-direction:column;align-items:center;gap:.75rem}
+  .builder-bottom-left,.builder-bottom-right{justify-content:center}
+  .builder-examples-label{display:none}
   .builder-blank{min-width:100px}
   .modal{padding:1.25rem;max-height:90vh}
 }
@@ -537,26 +543,29 @@ footer a{color:var(--accent2)}
 </div>
 
 <!-- Prompt Builder -->
-<section class="builder-section">
+<section class="builder-section" id="builder-section">
   <div class="builder-card" id="builder-card">
     <button class="builder-toggle" id="builder-toggle">
-      <span class="builder-toggle-left">
-        <span class="builder-icon">&#x1F9E0;</span>
-        <h2>expert prompt generator</h2>
-        <span class="builder-toggle-sub">fill in 4 inputs &bull; copy a custom prompt</span>
-      </span>
+      <h2><span class="builder-icon">&#x1F9E0;</span> expert prompt generator</h2>
+      <span class="builder-toggle-sub">fill in 4 inputs &bull; copy a custom prompt</span>
       <span class="builder-chevron">&#x25BC;</span>
     </button>
     <div class="builder-body">
       <div class="builder-body-inner">
+        <div class="builder-topbar">
+          <span class="builder-progress"><span class="filled-count" id="builder-filled">0</span> of 4 filled</span>
+        </div>
         <div class="builder-prompt" id="builder-prompt"></div>
         <div class="builder-bottom">
-          <span class="builder-progress"><span class="filled-count" id="builder-filled">0</span> of 4 filled</span>
-          <div class="builder-actions">
-            <button class="builder-example-btn" data-example="research">try: research analysis</button>
-            <button class="builder-example-btn" data-example="onboarding">try: onboarding guide</button>
+          <div class="builder-bottom-left">
+            <span class="builder-examples-label">quick examples:</span>
+            <button class="builder-example-btn" data-example="research">research analysis</button>
+            <button class="builder-example-btn" data-example="onboarding">onboarding guide</button>
+            <button class="builder-example-btn" data-example="strategy">strategy memo</button>
+          </div>
+          <div class="builder-bottom-right">
             <button class="builder-reset-btn" id="builder-reset">&#x21bb; reset</button>
-            <button class="builder-copy-btn" id="builder-copy">&#x1F4CB; copy prompt</button>
+            <button class="builder-copy-btn" id="builder-copy">&#x1F4CB; copy your prompt</button>
           </div>
         </div>
       </div>
@@ -2331,6 +2340,12 @@ const BUILDER_EXAMPLES={
     outcome:'30-60-90 day structured plan with milestones and check-in templates',
     audience:'engineering managers onboarding senior developers',
     constraints:'practical and specific, include templates, no corporate jargon'
+  },
+  strategy:{
+    topic:'Q2 go-to-market strategy for a new B2B SaaS product',
+    outcome:'executive memo with positioning, channel priorities, and 90-day milestones',
+    audience:'CMO and leadership team for quarterly planning',
+    constraints:'1-page memo format, data-backed, no fluff, include risk assessment'
   }
 };
 const BUILDER_BLANKS=[
@@ -2370,10 +2385,17 @@ function buildPromptHTML(){
   return html;
 }
 function initPromptBuilder(){
-  // Accordion toggle
+  // Accordion toggle with auto-scroll
   document.getElementById('builder-toggle').addEventListener('click',()=>{
-    document.getElementById('builder-card').classList.toggle('open');
+    const card=document.getElementById('builder-card');
+    const opening=!card.classList.contains('open');
+    card.classList.toggle('open');
     playClick();
+    if(opening){
+      setTimeout(()=>{
+        document.getElementById('builder-section').scrollIntoView({behavior:'smooth',block:'center'});
+      },150);
+    }
   });
   // Render prompt with inline blanks
   document.getElementById('builder-prompt').innerHTML=buildPromptHTML();
@@ -2412,7 +2434,7 @@ function initPromptBuilder(){
     });
     navigator.clipboard.writeText(prompt).then(()=>{
       this.classList.add('copied');this.innerHTML='\u2714 copied!';
-      setTimeout(()=>{this.classList.remove('copied');this.innerHTML='\u{1F4CB} copy prompt';},2000);
+      setTimeout(()=>{this.classList.remove('copied');this.innerHTML='\u{1F4CB} copy your prompt';},2000);
       showToast('prompt copied with your inputs.');
     });
   });
