@@ -156,6 +156,22 @@ a:hover{text-decoration:underline}
 .ctrl-btn:hover{border-color:var(--accent);color:var(--text)}
 .prompt-count{font-size:.78rem;color:var(--text3);white-space:nowrap}
 
+/* ─── Mood Filter ─────────────────────────────────────────────── */
+.mood-bar{max-width:1200px;margin:.5rem auto 0;padding:0 2rem;display:none;flex-wrap:wrap;gap:.4rem;
+  align-items:center}
+.mood-bar.show{display:flex}
+.mood-label{font-size:.72rem;color:var(--text3);letter-spacing:.5px;margin-right:.25rem;white-space:nowrap}
+.mood-pill{padding:.35rem .75rem;border-radius:20px;font-size:.75rem;font-weight:400;
+  background:transparent;border:1px dashed rgba(167,139,250,.25);color:var(--text2);
+  cursor:pointer;transition:var(--transition);white-space:nowrap;font-style:italic}
+.mood-pill:hover{border-color:rgba(167,139,250,.5);color:var(--accent2);border-style:solid;
+  background:rgba(167,139,250,.06)}
+.mood-pill.active{border-style:solid;border-color:var(--accent2);color:var(--accent2);
+  background:rgba(167,139,250,.1)}
+.mood-toggle{font-size:.78rem;color:var(--accent2);background:none;border:none;cursor:pointer;
+  font-family:var(--font);padding:.2rem 0;transition:var(--transition);opacity:.7}
+.mood-toggle:hover{opacity:1}
+
 /* ─── Theme / Sound Toggles ────────────────────────────────────── */
 .top-toggles{position:fixed;top:12px;right:12px;z-index:200;display:flex;gap:6px}
 .toggle-btn{width:36px;height:36px;border-radius:50%;background:var(--glass);
@@ -350,6 +366,8 @@ footer a{color:var(--accent2)}
   .controls-inner{flex-direction:column;align-items:stretch}
   .filter-pills{justify-content:center}
   .ctrl-btns{justify-content:center}
+  .mood-bar{justify-content:center;padding:0 1rem}
+  .mood-toggle{text-align:center;width:100%}
   .card-grid{grid-template-columns:1fr}
   .stats-bar{gap:1rem}
   .featured-card{min-width:240px}
@@ -429,6 +447,18 @@ footer a{color:var(--accent2)}
       <button class="ctrl-btn" id="view-toggle" title="Toggle view">&#9638; grid</button>
     </div>
     <div class="prompt-count" id="prompt-count">showing 17 of 17 prompts</div>
+    <button class="mood-toggle" id="mood-toggle">not sure what you need?</button>
+  </div>
+  <div class="mood-bar" id="mood-bar">
+    <span class="mood-label">i'm...</span>
+    <button class="mood-pill" data-mood="data">staring at a dataset</button>
+    <button class="mood-pill" data-mood="meeting">fresh out of a meeting</button>
+    <button class="mood-pill" data-mood="idea">sitting on a rough idea</button>
+    <button class="mood-pill" data-mood="write">trying to write something</button>
+    <button class="mood-pill" data-mood="stuck">feeling stuck</button>
+    <button class="mood-pill" data-mood="prompt">building a prompt</button>
+    <button class="mood-pill" data-mood="research">drowning in sources</button>
+    <button class="mood-pill" data-mood="learn">wanting to learn</button>
   </div>
 </div>
 
@@ -2171,7 +2201,18 @@ Structure your analysis as follows:
 };
 
 /* ─── State ────────────────────────────────────────────────────── */
-let currentFilter='all',currentSort='cat',currentView='grid',soundEnabled=false,firstCopy=true,firstRender=true;
+let currentFilter='all',currentSort='cat',currentView='grid',soundEnabled=false,firstCopy=true,firstRender=true,currentMood=null;
+
+const MOOD_MAP={
+  data:['general-data-analysis','platform-usage','survey-crosstab','mixed-methods','video-feedback'],
+  meeting:['meeting-summary'],
+  idea:['ideation-pipeline','thinking-partner'],
+  write:['copywriting-rewriter','meeting-summary'],
+  stuck:['elite-productivity','thinking-partner','god-mode'],
+  prompt:['prompt-optimizer','expert-prompt-gen'],
+  research:['research-synthesizer','exec-360'],
+  learn:['structured-learning','ai-mentor']
+};
 
 /* ─── Loading ──────────────────────────────────────────────────── */
 window.addEventListener('load',()=>{
@@ -2235,6 +2276,7 @@ function renderCards(){
   const grid=document.getElementById('card-grid');
   const q=document.getElementById('search').value.toLowerCase().trim();
   let list=prompts.filter(p=>{
+    if(currentMood&&MOOD_MAP[currentMood]&&!MOOD_MAP[currentMood].includes(p.id))return false;
     if(currentFilter!=='all'&&p.cat!==currentFilter)return false;
     if(q&&!p.name.toLowerCase().includes(q)&&!p.use.toLowerCase().includes(q)&&!p.best.toLowerCase().includes(q))return false;
     return true;
@@ -2274,8 +2316,7 @@ function openModal(id){
     }).join('')}</div>`:'';
   const meta=[
     {label:'use case',val:p.use},{label:'best for',val:p.best},
-    {label:'when to use',val:p.when},{label:'input format',val:p.input},
-    {label:'output',val:p.output}
+    {label:'when to use',val:p.when}
   ];
   const preview=PROMPT_PREVIEWS[p.id]||'';
   document.getElementById('modal-content').innerHTML=`
@@ -2359,10 +2400,39 @@ document.querySelectorAll('.pill').forEach(pill=>{
   pill.addEventListener('click',()=>{
     document.querySelectorAll('.pill').forEach(p=>{p.classList.remove('active');p.setAttribute('aria-selected','false')});
     pill.classList.add('active');pill.setAttribute('aria-selected','true');
-    currentFilter=pill.dataset.cat;renderCards();
+    currentFilter=pill.dataset.cat;
+    currentMood=null;document.querySelectorAll('.mood-pill').forEach(m=>m.classList.remove('active'));
+    renderCards();
   });
 });
-document.getElementById('search').addEventListener('input',renderCards);
+document.getElementById('search').addEventListener('input',()=>{
+  currentMood=null;document.querySelectorAll('.mood-pill').forEach(m=>m.classList.remove('active'));
+  renderCards();
+});
+
+/* ─── Mood Filter ──────────────────────────────────────────────── */
+document.getElementById('mood-toggle').addEventListener('click',function(){
+  const bar=document.getElementById('mood-bar');
+  bar.classList.toggle('show');
+  this.textContent=bar.classList.contains('show')?'hide moods':'not sure what you need?';
+});
+document.querySelectorAll('.mood-pill').forEach(pill=>{
+  pill.addEventListener('click',()=>{
+    const mood=pill.dataset.mood;
+    if(currentMood===mood){
+      currentMood=null;pill.classList.remove('active');
+    }else{
+      currentMood=mood;
+      document.querySelectorAll('.mood-pill').forEach(m=>m.classList.remove('active'));
+      pill.classList.add('active');
+    }
+    currentFilter='all';
+    document.querySelectorAll('.pill').forEach(p=>{p.classList.remove('active');p.setAttribute('aria-selected','false')});
+    document.querySelector('.pill[data-cat="all"]').classList.add('active');
+    document.getElementById('search').value='';
+    renderCards();
+  });
+});
 document.getElementById('sort-toggle').addEventListener('click',function(){
   currentSort=currentSort==='cat'?'az':'cat';
   this.innerHTML=currentSort==='az'?'\u21C5 cat':'\u21C5 a-z';renderCards();
@@ -2374,9 +2444,10 @@ document.getElementById('view-toggle').addEventListener('click',function(){
   this.innerHTML=currentView==='list'?'\u25A6 list':'\u25A6 grid';
 });
 function clearFilters(){
-  document.getElementById('search').value='';currentFilter='all';
+  document.getElementById('search').value='';currentFilter='all';currentMood=null;
   document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   document.querySelector('.pill[data-cat="all"]').classList.add('active');
+  document.querySelectorAll('.mood-pill').forEach(m=>m.classList.remove('active'));
   renderCards();
 }
 
