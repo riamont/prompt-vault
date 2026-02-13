@@ -226,11 +226,11 @@ a:hover{text-decoration:underline}
 .builder-modal-body::-webkit-scrollbar-thumb{background:rgba(167,139,250,.2);border-radius:4px}
 .builder-prompt-wrap{margin-bottom:.5rem}
 .builder-copy-btn{flex:1;font-size:.78rem;padding:.55rem .8rem;border-radius:12px;
-  background:var(--accent2);border:1px solid var(--accent2);
-  color:#fff;cursor:pointer;font-family:var(--font);font-weight:600;
+  background:rgba(139,92,246,.55);border:1px solid rgba(139,92,246,.6);
+  color:#e0e7ff;cursor:pointer;font-family:var(--font);font-weight:600;
   transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:5px}
-.builder-copy-btn:hover{background:#8b5cf6;border-color:#8b5cf6;
-  transform:translateY(-1px);box-shadow:0 4px 16px rgba(167,139,250,.3)}
+.builder-copy-btn:hover{background:rgba(139,92,246,.7);border-color:rgba(139,92,246,.8);
+  transform:translateY(-1px);box-shadow:0 4px 16px rgba(167,139,250,.25)}
 .builder-copy-btn.copied,.builder-copy-btn.copied:hover{background:#22c55e;color:#fff;
   border-color:#22c55e;transform:none;box-shadow:none}
 .builder-prompt{background:rgba(12,14,24,.95);border:1px solid var(--glass-border);
@@ -419,10 +419,13 @@ a:hover{text-decoration:underline}
 #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
   background:var(--bg3);border:1px solid var(--glass-border);border-radius:var(--radius-sm);
   padding:.65rem 1.2rem;font-size:.85rem;color:var(--text);z-index:600;
-  opacity:0;visibility:hidden;transition:var(--transition);
+  opacity:0;visibility:hidden;transition:all .4s cubic-bezier(.4,0,.2,1);
   box-shadow:0 8px 32px rgba(0,0,0,.3)}
 #toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
-#toast.success{background:rgba(99,102,241,.95);border-color:rgba(129,140,248,.5);color:#e0e7ff}
+#toast.success{top:24px;bottom:auto;transform:translateX(-50%) translateY(-30px);
+  background:rgba(251,191,36,.92);border-color:rgba(251,191,36,.6);color:#1a1a2e;
+  font-weight:600;box-shadow:0 8px 32px rgba(251,191,36,.15)}
+#toast.success.show{transform:translateX(-50%) translateY(0)}
 
 /* ─── Confetti ─────────────────────────────────────────────────── */
 .confetti-container{position:fixed;inset:0;pointer-events:none;z-index:700}
