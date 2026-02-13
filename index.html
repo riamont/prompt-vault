@@ -2377,19 +2377,19 @@ const BUILDER_BLANKS=[
   {key:'topic',original:'{{topic/project}}',label:'topic / project / role',
     placeholder:'describe your topic, project, or role...',
     hint:'what are you working on?',
-    chips:['survey analysis','program evaluation','competitor research','content strategy','process improvement','user feedback','onboarding program','team leadership','role: analyst','role: strategist']},
+    chips:['survey analysis','competitor research','content strategy','user feedback','role: analyst','role: strategist']},
   {key:'outcome',original:'{{specific outcome}}',label:'desired outcome',
     placeholder:'what specific deliverable do you need?',
     hint:'what does done look like?',
-    chips:['executive summary','action plan','ranked recommendations','comparison table','gap analysis','decision framework','slide deck outline','rubric']},
+    chips:['executive summary','action plan','ranked recommendations','data visuals','slide deck outline']},
   {key:'audience',original:'{{audience or downstream use}}',label:'audience',
     placeholder:'who will read or use the output?',
     hint:'who is this for?',
-    chips:['leadership team','product team','clients','board of directors','cross-functional team','external partners','direct reports','students']},
+    chips:['leadership team','clients','cross-functional team','external partners','students']},
   {key:'constraints',original:'{{deadlines, tone, format, tools, length, etc.}}',label:'constraints',
     placeholder:'any limits on length, tone, format, or tools?',
     hint:'what are the boundaries?',
-    chips:['under 1 page','formal tone','bullet points','data-backed','no jargon','include examples','actionable','no em-dashes']}
+    chips:['under 1 page','formal tone','bullet points','data-backed','include examples','no em-dashes']}
 ];
 function buildPromptHTML(){
   let raw=FULL_PROMPTS['expert-prompt-gen']||'';
@@ -2474,7 +2474,9 @@ function initPromptBuilder(){
     blanks.forEach(b=>{vals[b.dataset.key]=b.textContent.trim();});
     let prompt=FULL_PROMPTS['expert-prompt-gen']||'';
     BUILDER_BLANKS.forEach(b=>{
-      prompt=prompt.replace(b.original,vals[b.key]||b.original);
+      const v=vals[b.key]||b.original;
+      const replacement=v.includes('\u2022')?'\n'+v:v;
+      prompt=prompt.replace(b.original,replacement);
     });
     navigator.clipboard.writeText(prompt).then(()=>{
       this.classList.add('copied');this.innerHTML='\u2714 copied!';
