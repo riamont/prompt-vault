@@ -195,19 +195,7 @@ a:hover{text-decoration:underline}
 #scroll-top.show{opacity:1;visibility:visible;transform:translateY(0)}
 #scroll-top:hover{transform:translateY(-2px);box-shadow:0 6px 30px var(--accent-glow)}
 
-/* ─── Prompt Builder Trigger ───────────────────────────────────── */
-.builder-trigger-wrap{text-align:center;margin:2rem auto 1rem;padding:0 2rem}
-.builder-trigger{display:inline-flex;align-items:center;gap:8px;
-  padding:.65rem 1.8rem;background:rgba(167,139,250,.06);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(167,139,250,.15);border-radius:50px;
-  color:var(--accent2);font-family:var(--font);font-size:.88rem;font-weight:500;
-  cursor:pointer;transition:all .4s ease;letter-spacing:.02em;
-  box-shadow:0 0 24px rgba(167,139,250,.08),0 0 60px rgba(167,139,250,.03)}
-.builder-trigger:hover{box-shadow:0 0 30px rgba(167,139,250,.18),0 0 80px rgba(167,139,250,.07);
-  transform:translateY(-2px);border-color:rgba(167,139,250,.3);background:rgba(167,139,250,.1)}
-[data-theme="light"] .builder-trigger{background:rgba(167,139,250,.08);
-  box-shadow:0 0 20px rgba(167,139,250,.06)}
+/* ─── Prompt Builder Trigger (in action bar) ──────────────────── */
 
 /* ─── Prompt Builder Modal ────────────────────────────────────── */
 .builder-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.6);
@@ -215,7 +203,7 @@ a:hover{text-decoration:underline}
   opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;
   display:flex;align-items:center;justify-content:center;padding:2rem}
 .builder-overlay.show{opacity:1;visibility:visible}
-.builder-modal{background:var(--bg2);border:1px solid var(--glass-border);
+.builder-modal{background:var(--bg);border:1px solid var(--glass-border);
   border-radius:var(--radius);width:100%;max-width:680px;max-height:88vh;
   display:flex;flex-direction:column;transform:translateY(20px) scale(.97);
   transition:transform .3s cubic-bezier(.4,0,.2,1);position:relative}
@@ -262,17 +250,17 @@ a:hover{text-decoration:underline}
 .builder-prompt .string{color:#6ee7b7}
 .builder-prompt .variable{color:#fbbf24}
 .builder-prompt .operator{color:#f472b6}
-.builder-blank-wrap{display:block;margin:.5rem 0;padding:.6rem .75rem;
-  background:rgba(167,139,250,.06);border-radius:10px;
-  border:1px solid rgba(167,139,250,.15)}
+.builder-blank-wrap{display:block;margin:.5rem 0;padding:.7rem .85rem;
+  background:rgba(167,139,250,.08);border-radius:10px;
+  border:1px solid rgba(167,139,250,.2)}
 .builder-blank-label{display:flex;align-items:center;justify-content:space-between;
   font-family:var(--font);font-size:.68rem;font-weight:600;letter-spacing:.5px;
   color:var(--accent2);margin-bottom:.3rem;text-transform:uppercase}
 .builder-blank-hint{font-size:.65rem;color:var(--text);font-weight:400;
   letter-spacing:0;text-transform:none;font-style:italic;opacity:.6}
 .builder-blank{display:block;width:100%;padding:.5rem .7rem;
-  background:rgba(167,139,250,.08);border:1.5px dashed rgba(167,139,250,.35);
-  border-radius:8px;color:var(--accent2);font-family:var(--font);font-size:.8rem;
+  background:rgba(167,139,250,.12);border:1.5px dashed rgba(167,139,250,.4);
+  border-radius:8px;color:#e2e8f0;font-family:var(--font);font-size:.8rem;
   outline:none;transition:var(--transition);cursor:text;line-height:1.6;
   min-height:3em;white-space:pre-wrap;word-break:break-word}
 .builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.3);
@@ -293,8 +281,13 @@ a:hover{text-decoration:underline}
   gap:.5rem;flex-shrink:0}
 .builder-footer-left{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
 .builder-examples-label{font-size:.7rem;color:var(--text3);white-space:nowrap}
-.builder-footer-center{font-size:.72rem;color:var(--text3);letter-spacing:.3px}
-.builder-footer-center .filled-count{color:var(--accent2);font-weight:600}
+.builder-progress-wrap{display:flex;align-items:center;gap:.5rem}
+.builder-progress-text{font-size:.7rem;color:var(--text3);white-space:nowrap}
+.builder-progress-text .filled-count{color:var(--accent2);font-weight:600}
+.builder-progress-track{width:80px;height:5px;background:var(--bg3);border-radius:4px;
+  overflow:hidden}
+.builder-progress-fill{height:100%;background:var(--accent2);border-radius:4px;
+  transition:width .4s cubic-bezier(.4,0,.2,1);width:0}
 .builder-footer-right{display:flex;gap:.4rem;align-items:center}
 .builder-example-btn{font-size:.7rem;padding:.25rem .6rem;border-radius:14px;
   background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.15);
@@ -537,6 +530,7 @@ footer a{color:var(--accent2)}
     <span class="roulette-text">prompt roulette</span>
   </button>
   <button class="mood-toggle" id="mood-toggle">&#x1F914; whats ur vibe?</button>
+  <button class="mood-toggle" id="builder-trigger">&#x1F3A8; build w/ me</button>
   <div class="mood-bar" id="mood-bar">
     <span class="mood-label">i'm...</span>
     <button class="mood-pill" data-mood="data">staring at a dataset</button>
@@ -572,18 +566,11 @@ footer a{color:var(--accent2)}
   </div>
 </div>
 
-<!-- Prompt Builder Trigger -->
-<div class="builder-trigger-wrap">
-  <button class="builder-trigger" id="builder-trigger">
-    <span>&#x1F9E0;</span> expert prompt generator
-  </button>
-</div>
-
 <!-- Prompt Builder Modal -->
 <div class="builder-overlay" id="builder-overlay">
   <div class="builder-modal">
     <div class="builder-modal-header">
-      <h2><span class="builder-icon">&#x1F9E0;</span> expert prompt generator</h2>
+      <h2><span class="builder-icon">&#x1F3A8;</span> expert prompt generator</h2>
       <p class="builder-modal-sub">fill in 4 inputs &bull; copy a custom prompt</p>
       <button class="builder-modal-close" id="builder-close">&times;</button>
     </div>
@@ -600,7 +587,10 @@ footer a{color:var(--accent2)}
         <button class="builder-example-btn" data-example="onboarding">onboarding guide</button>
         <button class="builder-example-btn" data-example="strategy">strategy memo</button>
       </div>
-      <span class="builder-footer-center"><span class="filled-count" id="builder-filled">0</span> of 4 filled</span>
+      <div class="builder-progress-wrap">
+        <div class="builder-progress-track"><div class="builder-progress-fill" id="builder-progress-fill"></div></div>
+        <span class="builder-progress-text"><span class="filled-count" id="builder-filled">0</span> of 4 filled</span>
+      </div>
       <div class="builder-footer-right">
         <button class="builder-reset-btn" id="builder-reset">&#x21bb; reset</button>
       </div>
@@ -2438,9 +2428,13 @@ function initPromptBuilder(){
   document.getElementById('builder-prompt').innerHTML=buildPromptHTML();
   const blanks=document.querySelectorAll('.builder-blank');
   const filledEl=document.getElementById('builder-filled');
+  const progressFill=document.getElementById('builder-progress-fill');
   function updateProgress(){
     const count=[...blanks].filter(b=>b.textContent.trim().length>0).length;
     filledEl.textContent=count;
+    progressFill.style.width=(count/4*100)+'%';
+    if(count===4)progressFill.style.background='#22c55e';
+    else progressFill.style.background='';
     blanks.forEach(b=>{
       if(b.textContent.trim().length>0)b.classList.add('filled');
       else b.classList.remove('filled');
