@@ -141,10 +141,14 @@ a:hover{text-decoration:underline}
   background:var(--bg3);border:1px solid var(--glass-border);color:var(--text2);
   cursor:pointer;transition:var(--transition);white-space:nowrap}
 .pill:hover,.pill.active{color:#fff;border-color:var(--accent);background:var(--accent)}
-.pill[data-cat="analysis"].active{background:var(--analysis);border-color:var(--analysis)}
-.pill[data-cat="productivity"].active{background:var(--productivity);border-color:var(--productivity)}
-.pill[data-cat="meta-prompts"].active{background:var(--meta);border-color:var(--meta)}
-.pill[data-cat="communication"].active{background:var(--comm);border-color:var(--comm)}
+.pill[data-cat="analysis"]{color:var(--analysis);border-color:rgba(59,130,246,.3)}
+.pill[data-cat="analysis"]:hover,.pill[data-cat="analysis"].active{background:var(--analysis);border-color:var(--analysis);color:#fff}
+.pill[data-cat="productivity"]{color:var(--productivity);border-color:rgba(34,197,94,.3)}
+.pill[data-cat="productivity"]:hover,.pill[data-cat="productivity"].active{background:var(--productivity);border-color:var(--productivity);color:#fff}
+.pill[data-cat="meta-prompts"]{color:var(--meta);border-color:rgba(168,85,247,.3)}
+.pill[data-cat="meta-prompts"]:hover,.pill[data-cat="meta-prompts"].active{background:var(--meta);border-color:var(--meta);color:#fff}
+.pill[data-cat="communication"]{color:var(--comm);border-color:rgba(249,115,22,.3)}
+.pill[data-cat="communication"]:hover,.pill[data-cat="communication"].active{background:var(--comm);border-color:var(--comm);color:#fff}
 .ctrl-btns{display:flex;gap:.4rem;align-items:center}
 .ctrl-btn{padding:.4rem .65rem;border-radius:var(--radius-sm);font-size:.8rem;
   background:var(--bg3);border:1px solid var(--glass-border);color:var(--text2);
@@ -268,7 +272,7 @@ a:hover{text-decoration:underline}
 .modal .card-tag{margin-bottom:1rem}
 .modal .meta-grid{display:grid;gap:.75rem;margin-bottom:1.25rem}
 .meta-item label{display:block;font-size:.7rem;font-weight:600;
-  letter-spacing:1px;color:var(--text3);margin-bottom:2px}
+  letter-spacing:1px;color:var(--text);margin-bottom:2px}
 .meta-item p{font-size:.88rem;color:var(--text2);line-height:1.5}
 .pairs-section{margin-bottom:1.25rem}
 .pairs-section h4{font-size:.8rem;font-weight:600;color:var(--text3);
@@ -340,8 +344,6 @@ footer a{color:var(--accent2)}
   padding:6px 12px;font-size:.75rem;white-space:nowrap;color:var(--text2);
   opacity:0;visibility:hidden;transition:var(--transition);pointer-events:none}
 .footer-tooltip:hover::after{opacity:1;visibility:visible}
-.hidden-bottom{color:var(--text3);font-size:.8rem;padding:2rem;text-align:center;
-  opacity:.4}
 
 /* ─── Responsive ───────────────────────────────────────────────── */
 @media(max-width:768px){
@@ -391,7 +393,7 @@ footer a{color:var(--accent2)}
     <h1>prompt vault</h1>
     <p class="tagline">a curated prompt library <span class="typed" id="typed-text"></span><span class="cursor"></span></p>
     <button class="roulette-btn" id="roulette-btn">
-      <span class="roulette-icon">&#x21C6;</span>
+      <span class="roulette-icon">&#x1F3B2;</span>
       <span class="roulette-text">prompt roulette</span>
     </button>
     <div class="scroll-indicator">
@@ -465,7 +467,6 @@ footer a{color:var(--accent2)}
   </p>
   <p style="margin-top:.5rem">&copy; 2026</p>
 </footer>
-<div class="hidden-bottom">you found the bottom. now go build something.</div>
 
 <script>
 /* ─── Prompt Data ──────────────────────────────────────────────── */
@@ -2223,7 +2224,7 @@ function renderFeatured(){
   c.innerHTML=FEATURED_IDS.map(id=>{
     const p=prompts.find(x=>x.id===id);if(!p)return'';
     return `<div class="featured-card" onclick="openModal('${p.id}')" tabindex="0" role="button" aria-label="View ${p.name}">
-      <div class="featured-badge">\u2014 featured</div>
+      <div class="featured-badge">\u2B50 featured</div>
       <h3>${p.name.toLowerCase()}</h3>
       <p>${p.use}</p></div>`;
   }).join('');
@@ -2283,7 +2284,7 @@ function openModal(id){
     <div class="meta-grid">${meta.map(m=>`<div class="meta-item"><label>${m.label}</label><p>${m.val}</p></div>`).join('')}</div>
     ${preview?`<div class="preview-label">prompt excerpt</div><div class="prompt-preview">${preview}</div>`:''}
     ${pairsHtml}
-    <button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">copy prompt</button>`;
+    <button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">\u{1F4CB} copy prompt</button>`;
   const o=document.getElementById('modal-overlay');o.classList.add('show');
   document.body.style.overflow='hidden';
 }
@@ -2315,9 +2316,9 @@ function copyPromptInfo(btn,id){
   const full=FULL_PROMPTS[p.id]||'';
   const text=full?`${p.name}\n\n${full}`:`${p.name}\nCategory: ${CAT_LABELS[p.cat]}\nUse Case: ${p.use}`;
   navigator.clipboard.writeText(text).then(()=>{
-    btn.classList.add('copied');btn.innerHTML='copied!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='copy prompt';},2000);
-    showToast('prompt copied \u2014 go build something great.');
+    btn.classList.add('copied');btn.innerHTML='\u2714 copied!';
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='\u{1F4CB} copy prompt';},2000);
+    showToast('prompt copied to clipboard.');
     if(firstCopy){firstCopy=false;launchConfetti();}
   });
 }
@@ -2349,17 +2350,7 @@ document.getElementById('roulette-btn').addEventListener('click',function(){
   setTimeout(()=>{
     btn.classList.remove('spinning');
     const p=prompts[Math.floor(Math.random()*prompts.length)];
-    currentFilter='all';
-    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
-    document.querySelector('.pill[data-cat="all"]').classList.add('active');
-    document.getElementById('search').value='';
-    renderCards();
-    setTimeout(()=>{
-      const card=document.querySelector(`[data-id="${p.id}"]`);
-      if(card){card.scrollIntoView({behavior:'smooth',block:'center'});
-        card.classList.remove('highlight');void card.offsetWidth;card.classList.add('highlight');
-        setTimeout(()=>openModal(p.id),1500);}
-    },100);
+    openModal(p.id);
   },600);
 });
 
