@@ -59,11 +59,11 @@ a:hover{text-decoration:underline}
 
 /* ─── Hero ─────────────────────────────────────────────────────── */
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;text-align:center;padding:2rem;
+  align-items:center;justify-content:center;text-align:center;padding:6rem 2rem;
   overflow:hidden}
-.hero-content{position:relative;z-index:1}
-.hero h1{font-size:clamp(2.5rem,8vw,5.5rem);font-weight:800;letter-spacing:.08em;
-  background:linear-gradient(135deg,#e2e8f0 0%,#6366f1 50%,#a855f7 100%);
+.hero-content{position:relative;z-index:1;max-width:800px}
+.hero h1{font-size:clamp(3.5rem,11vw,7.5rem);font-weight:900;letter-spacing:.06em;
+  background:linear-gradient(135deg,#7c3aed 0%,#a78bfa 25%,#f59e0b 75%,#fbbf24 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;cursor:default;line-height:1.1;margin-bottom:.5rem;
   transition:letter-spacing .4s}
@@ -75,17 +75,15 @@ a:hover{text-decoration:underline}
   40%{transform:translate(var(--sx),var(--sy)) rotate(var(--sr));opacity:.4}
   100%{transform:translate(0,0) rotate(0);opacity:1}
 }
-.tagline{font-size:clamp(1.1rem,3vw,1.5rem);color:var(--text2);margin-bottom:.25rem;
-  min-height:2em}
+.tagline-glass{background:rgba(30,35,60,.3);backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);
+  border-radius:var(--radius);padding:1.25rem 2.5rem;margin:2.5rem 0 3rem;max-width:600px}
+[data-theme="light"] .tagline-glass{background:rgba(255,255,255,.45)}
+.tagline{font-size:clamp(1.05rem,2.5vw,1.35rem);color:var(--text2);margin:0;min-height:1.8em}
 .tagline .typed{color:var(--accent2);font-weight:600}
 .tagline .cursor{display:inline-block;width:2px;height:1.2em;background:var(--accent2);
   vertical-align:text-bottom;animation:blink .7s infinite}
 @keyframes blink{50%{opacity:0}}
-.subtext{color:var(--text3);font-size:1rem;margin-top:.25rem;margin-bottom:2rem}
-.hero-counter{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;
-  color:var(--accent);margin-bottom:.25rem}
-.hero-counter-label{color:var(--text3);font-size:.85rem;text-transform:uppercase;
-  letter-spacing:2px;margin-bottom:2rem}
 .scroll-indicator{animation:bounce 2s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(10px)}}
 .scroll-indicator svg{width:28px;height:28px;stroke:var(--text3);fill:none;
@@ -256,6 +254,16 @@ a:hover{text-decoration:underline}
   font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--transition)}
 .copy-btn:hover{background:var(--accent2);transform:translateY(-1px)}
 .copy-btn.copied{background:#22c55e}
+.prompt-preview{background:var(--bg);border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:.75rem 0 1rem;
+  font-family:'SF Mono',Monaco,Consolas,'Liberation Mono',monospace;font-size:.78rem;
+  color:var(--text2);line-height:1.65;white-space:pre-wrap;max-height:220px;overflow-y:auto}
+.prompt-preview::-webkit-scrollbar{width:4px}
+.prompt-preview::-webkit-scrollbar-thumb{background:var(--accent);border-radius:4px}
+.preview-label{font-size:.7rem;font-weight:600;text-transform:uppercase;
+  letter-spacing:1px;color:var(--text3);margin:1.25rem 0 .35rem;display:flex;
+  align-items:center;gap:.5rem}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--glass-border)}
 
 /* ─── Toast ────────────────────────────────────────────────────── */
 #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
@@ -316,9 +324,11 @@ footer a{color:var(--accent2)}
   .stats-bar{gap:1rem}
   .featured-card{min-width:240px}
   .modal{padding:1.25rem;max-height:90vh}
+  .tagline-glass{padding:1rem 1.5rem;margin:1.5rem 0 2rem}
 }
 @media(max-width:480px){
-  .hero h1{font-size:2.2rem}
+  .hero h1{font-size:2.8rem}
+  .tagline-glass{padding:.75rem 1.25rem;margin:1.5rem 0 2rem}
   .stats-bar{flex-direction:column;gap:.5rem}
 }
 </style>
@@ -349,10 +359,9 @@ footer a{color:var(--accent2)}
   <div id="hero-bg"><canvas id="particles"></canvas></div>
   <div class="hero-content">
     <h1 id="hero-title">PROMPT VAULT</h1>
-    <p class="tagline">A curated prompt library <span class="typed" id="typed-text"></span><span class="cursor"></span></p>
-    <p class="subtext">Built by Ria &amp; Claude &#x1F4AA;</p>
-    <div class="hero-counter" id="hero-counter">0</div>
-    <div class="hero-counter-label">Production-Ready Prompts</div>
+    <div class="tagline-glass">
+      <p class="tagline">A curated prompt library <span class="typed" id="typed-text"></span><span class="cursor"></span></p>
+    </div>
     <div class="scroll-indicator">
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
@@ -555,6 +564,25 @@ const ICONS={analysis:'\u{1F4CA}',productivity:'\u26A1','meta-prompts':'\u{1F9E0
 const CAT_LABELS={analysis:'Analysis',productivity:'Productivity','meta-prompts':'Meta-Prompts',communication:'Communication'};
 const FEATURED_IDS=['survey-crosstab','expert-prompt-gen','ideation-pipeline','god-mode','copywriting-rewriter'];
 
+const PROMPT_PREVIEWS={
+'general-data-analysis':`ROLE: Senior data analyst specializing in exploratory data analysis, statistical profiling, and data storytelling for organizational research.\n\nTASK: Conduct structured EDA \u2014 data profiling, key findings by category, pattern detection, anomaly flags, visualizations with explanations, and prioritized next steps.`,
+'platform-usage':`ROLE: Product analytics and behavioral data specialist with expertise in user journey analysis, workflow compliance measurement, and adoption diagnostics.\n\nTASK: Analyze platform usage data to detect workflow compliance, segment users into behavioral groups, identify anomalies and trends, and deliver UX/process recommendations.`,
+'survey-crosstab':`ROLE: Senior survey research analyst with expertise in cross-tabulation design and data storytelling. Fluent in APA reporting conventions.\n\nTASK: Generate cross-tabulations with significance flags, top-box/bottom-box summaries, and narrative interpretation. Companion prompt codes open-ended responses with thematic and sentiment analysis.`,
+'mixed-methods':`ROLE: Expert organizational psychologist and mixed-methods research analyst specializing in program evaluation and educational measurement.\n\nTASK: Full-spectrum analysis \u2014 descriptive stats with correlations and effect sizes, inductive thematic coding, cross-analysis integrating quant and qual, and an actionable insights brief.`,
+'video-feedback':`ROLE: Mixed-methods research analyst specializing in educational technology evaluation and student experience research.\n\nTASK: Three-part analysis of video assessment feedback \u2014 platform feedback themes and sentiment, student experience and learning insights, synthesized recommendations with power quotes.`,
+'research-synthesizer':`ROLE: Senior research analyst with expertise in systematic evidence synthesis and translating complex multi-source findings into clear, actionable reports.\n\nTASK: Eight-section synthesis \u2014 executive summary with confidence levels, source assessment, thematic analysis, evidence integration, critical analysis, recommendations, gaps, and practical application.`,
+'elite-productivity':`ROLE: Elite productivity strategist. Audits time usage, exposes inefficiency, and designs hyper-efficient personalized systems. Direct, tactical, no wasted minutes.\n\nTASK: Four phases \u2014 time audit and energy mapping, strategic schedule with time-blocking, focus execution with distraction shielding, and a 7-day implementation challenge.`,
+'meeting-summary':`ROLE: Expert meeting facilitator and executive communications specialist. Distinguishes what was discussed from what was decided.\n\nTASK: Six-section summary \u2014 overview, key decisions with rationale, discussion highlights by theme, action items table with owners and due dates, next steps, and parking lot.`,
+'ideation-pipeline':`ROLE: Expert ideation strategist and project planner. Guides ideas from rough concept to executable plan through a multi-stage pipeline.\n\nTASK: Eight stages \u2014 idea refinement, expert panel simulation, high-level plan, milestones, task decomposition, resource mapping, RAID analysis, and summary with optional Gantt chart.`,
+'exec-360':`ROLE: Senior organizational psychologist specializing in executive assessment and 360-degree feedback synthesis from multiple rater groups.\n\nTASK: Extract and map interview comments to question headings, tag by rater group, organize under thematic sub-headings, compile presentation-ready document, and flag contradictions.`,
+'prompt-optimizer':`ROLE: Master-level prompt optimization specialist. Transforms any input into precision-crafted prompts using the 4-D methodology.\n\nTASK: Deconstruct (extract intent and gaps), Diagnose (audit clarity and specificity), Develop (select techniques, assign roles, add constraints), and Deliver (optimized prompt with explanation).`,
+'expert-prompt-gen':`ROLE: Prompt architect \u2014 designer of cognitive systems. Constructs prompts that reliably produce expert-level outputs through reasoning structures and quality criteria.\n\nTASK: Three-phase protocol \u2014 deep scoping (decompose goals, map expertise, surface the unstated), prompt construction (ROLE/CONTEXT/TASK/CONSTRAINTS architecture), and stress-testing.`,
+'god-mode':`ROLE: Strategic Accelerator Mode \u2014 cross-disciplinary strategist with polymath range and specialist precision. Makes good ideas great and great ideas bulletproof.\n\nTASK: Five principles \u2014 interrogate assumptions, structure with frameworks and decision matrices, ground claims in evidence, challenge weak reasoning directly, and communicate with precision.`,
+'thinking-partner':`ROLE: Elite thinking partner and intellectual sparring companion. Upgrades your thinking rather than answering your questions.\n\nTASK: Five-step sequence \u2014 listen and deconstruct, probe with targeted questions, reframe from unconsidered angles, challenge with counterarguments, and synthesize without deciding for you.`,
+'copywriting-rewriter':`ROLE: Master copywriting strategist with encyclopedic knowledge of persuasion frameworks, direct response formulas, and narrative structures.\n\nTASK: Analyze intent and audience, select 6 best-fit frameworks from 232+ options (AIDA, PAS, BAB, PASTOR, StoryBrand, etc.), rewrite using each, and output formatted for comparison.`,
+'ai-mentor':`ROLE: Friendly academic mentor with high standards. Gives specific, actionable feedback using a Socratic approach \u2014 questions that prompt reflection rather than providing answers.\n\nTASK: Seven-stage protocol \u2014 gather context, collect rubric, ask for self-assessment, receive draft, deliver balanced feedback, guide reflection through questioning, and encourage peer feedback.`,
+'structured-learning':`ROLE: World-class teacher who adapts to learner experience level and systematically explores topics through structured question categories.\n\nTASK: Guide through 10 categories \u2014 Historical Perspective, Fact-Based, Descriptive, Broad, Narrowed Focus, Cause-and-Effect, Correlative, Hypothetical, Reflective, and Outside the Box. Five questions each.`};
+
 /* ─── State ────────────────────────────────────────────────────── */
 let currentFilter='all',currentSort='cat',currentView='grid',soundEnabled=false,firstCopy=true;
 
@@ -563,7 +591,7 @@ window.addEventListener('load',()=>{
   setTimeout(()=>document.getElementById('vault-door').classList.add('open'),300);
   setTimeout(()=>{
     document.getElementById('loader').classList.add('hidden');
-    initParticles();animateHeroCounter();startTyping();animateStats();renderFeatured();renderCards();
+    initParticles();startTyping();animateStats();renderFeatured();renderCards();
   },1800);
 });
 
@@ -595,17 +623,6 @@ function initParticles(){
     }
     requestAnimationFrame(draw);
   })();
-}
-
-/* ─── Hero Counter ─────────────────────────────────────────────── */
-function animateHeroCounter(){
-  const el=document.getElementById('hero-counter');
-  let n=0;const target=17,dur=1500,start=performance.now();
-  (function tick(now){
-    const p=Math.min((now-start)/dur,1);
-    el.textContent=Math.round(p*target);
-    if(p<1)requestAnimationFrame(tick);
-  })(start);
 }
 
 /* ─── Typing Effect ────────────────────────────────────────────── */
@@ -717,12 +734,14 @@ function openModal(id){
     {label:'When to Use',val:p.when},{label:'Input Format',val:p.input},
     {label:'Output',val:p.output}
   ];
+  const preview=PROMPT_PREVIEWS[p.id]||'';
   document.getElementById('modal-content').innerHTML=`
     <h2>${p.icon} ${p.name}</h2>
     <span class="card-tag" data-cat="${p.cat}">${CAT_LABELS[p.cat]}</span>
     <div class="meta-grid">${meta.map(m=>`<div class="meta-item"><label>${m.label}</label><p>${m.val}</p></div>`).join('')}</div>
+    ${preview?`<div class="preview-label">Prompt Excerpt</div><div class="prompt-preview">${preview}</div>`:''}
     ${pairsHtml}
-    <button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">&#x1F4CB; Copy Metadata</button>`;
+    <button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">&#x1F4CB; Copy Prompt</button>`;
   const o=document.getElementById('modal-overlay');o.classList.add('show');
   document.body.style.overflow='hidden';
 }
@@ -736,19 +755,26 @@ document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.targe
 function scrollToCard(id){
   closeModal();
   setTimeout(()=>{
+    currentFilter='all';
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    document.querySelector('.pill[data-cat="all"]').classList.add('active');
+    document.getElementById('search').value='';
+    renderCards();
     const card=document.querySelector(`[data-id="${id}"]`);
     if(card){card.scrollIntoView({behavior:'smooth',block:'center'});
-      card.classList.remove('highlight');void card.offsetWidth;card.classList.add('highlight');}
+      card.classList.remove('highlight');void card.offsetWidth;card.classList.add('highlight');
+      setTimeout(()=>openModal(id),1500);}
   },400);
 }
 
 /* ─── Copy ──────────────────────────────────────────────────────── */
 function copyPromptInfo(btn,id){
   const p=prompts.find(x=>x.id===id);if(!p)return;
-  const text=`${p.name}\nCategory: ${CAT_LABELS[p.cat]}\nUse Case: ${p.use}\nBest For: ${p.best}\nWhen to Use: ${p.when}\nInput: ${p.input}\nOutput: ${p.output}`;
+  const preview=PROMPT_PREVIEWS[p.id]||'';
+  const text=preview?`${p.name}\n\n${preview}`:`${p.name}\nCategory: ${CAT_LABELS[p.cat]}\nUse Case: ${p.use}`;
   navigator.clipboard.writeText(text).then(()=>{
     btn.classList.add('copied');btn.innerHTML='\u2714 Copied!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='\u{1F4CB} Copy Metadata';},2000);
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='\u{1F4CB} Copy Prompt';},2000);
     showToast('Prompt copied! Go build something great.');
     if(firstCopy){firstCopy=false;launchConfetti();}
   });
