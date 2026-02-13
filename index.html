@@ -2301,7 +2301,7 @@ function openModal(id){
     <h2>${p.name.toLowerCase()}</h2>
     <span class="card-tag" data-cat="${p.cat}">${CAT_LABELS[p.cat]}</span>
     <div class="meta-grid">${meta.map(m=>`<div class="meta-item"><label>${m.label}</label><p>${m.val}</p></div>`).join('')}</div>
-    ${full?`<div class="preview-label">full prompt<button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">\u{1F4CB} copy prompt</button></div><div class="prompt-preview">${highlightSyntax(full)}</div>`:''}
+    ${full?`<div class="preview-label">full prompt<button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">\u{1F4CB} copy</button></div><div class="prompt-preview">${highlightSyntax(full)}</div>`:''}
     ${pairsHtml}`;
   const o=document.getElementById('modal-overlay');o.classList.add('show');
   document.body.style.overflow='hidden';
@@ -2356,7 +2356,7 @@ function copyPromptInfo(btn,id){
   const text=full?`${p.name}\n\n${full}`:`${p.name}\nCategory: ${CAT_LABELS[p.cat]}\nUse Case: ${p.use}`;
   navigator.clipboard.writeText(text).then(()=>{
     btn.classList.add('copied');btn.innerHTML='\u2714 copied!';
-    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='\u{1F4CB} copy prompt';},2000);
+    setTimeout(()=>{btn.classList.remove('copied');btn.innerHTML='\u{1F4CB} copy';},2000);
     showToast('prompt copied to clipboard.');
     if(firstCopy){firstCopy=false;launchConfetti();}
   });
