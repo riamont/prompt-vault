@@ -196,7 +196,7 @@ a:hover{text-decoration:underline}
 #scroll-top:hover{transform:translateY(-2px);box-shadow:0 6px 30px var(--accent-glow)}
 
 /* ─── Prompt Builder Accordion ─────────────────────────────────── */
-.builder-section{max-width:900px;margin:2.5rem auto 1rem;padding:0 2rem}
+.builder-section{max-width:1100px;margin:2.5rem auto 1rem;padding:0 2rem}
 .builder-card{background:var(--glass);backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);border:1px solid var(--glass-border);
   border-radius:var(--radius);overflow:hidden}
@@ -218,7 +218,7 @@ a:hover{text-decoration:underline}
   border-radius:var(--radius-sm);padding:1rem 1.25rem;
   font-family:'SF Mono',Monaco,Consolas,'Courier New',monospace;font-size:.73rem;
   color:var(--text2);line-height:1.6;white-space:pre-wrap;word-break:break-word;
-  max-height:420px;overflow-y:auto;text-transform:none;margin-bottom:1rem;
+  max-height:600px;overflow-y:auto;text-transform:none;margin-bottom:1rem;
   scrollbar-width:thin;scrollbar-color:rgba(167,139,250,.2) transparent}
 [data-theme="light"] .builder-prompt{background:rgba(30,41,59,.95);color:#cbd5e1}
 .builder-prompt::-webkit-scrollbar{width:4px}
@@ -265,6 +265,11 @@ a:hover{text-decoration:underline}
   display:inline-flex;align-items:center;gap:5px}
 .builder-copy-btn:hover{background:var(--accent2);transform:translateY(-1px)}
 .builder-copy-btn.copied{background:#22c55e}
+.builder-reset-btn{font-size:.72rem;padding:.3rem .7rem;border-radius:16px;
+  background:none;border:1px solid rgba(239,68,68,.2);color:var(--text3);
+  cursor:pointer;font-family:var(--font);transition:var(--transition);white-space:nowrap}
+.builder-reset-btn:hover{border-color:rgba(239,68,68,.45);color:#f87171;
+  background:rgba(239,68,68,.06)}
 
 /* ─── Card Grid ────────────────────────────────────────────────── */
 .main-content{max-width:1240px;margin:0 auto;padding:1rem 2rem 4rem}
@@ -549,6 +554,7 @@ footer a{color:var(--accent2)}
           <div class="builder-actions">
             <button class="builder-example-btn" data-example="research">try: research analysis</button>
             <button class="builder-example-btn" data-example="onboarding">try: onboarding guide</button>
+            <button class="builder-reset-btn" id="builder-reset">reset</button>
             <button class="builder-copy-btn" id="builder-copy">&#x1F4CB; copy prompt</button>
           </div>
         </div>
@@ -2391,6 +2397,10 @@ function initPromptBuilder(){
       blanks.forEach(b=>{b.textContent=ex[b.dataset.key]||'';});
       updateProgress();playClick();
     });
+  });
+  document.getElementById('builder-reset').addEventListener('click',()=>{
+    blanks.forEach(b=>{b.textContent='';});
+    updateProgress();playClick();
   });
   document.getElementById('builder-copy').addEventListener('click',function(){
     const vals={};
