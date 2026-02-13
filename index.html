@@ -160,7 +160,7 @@ a:hover{text-decoration:underline}
 .mood-label{font-size:.72rem;color:var(--text3);letter-spacing:.5px;margin-right:.25rem;white-space:nowrap}
 .mood-pill{padding:.35rem .75rem;border-radius:20px;font-size:.75rem;font-weight:400;
   background:transparent;border:1px dashed rgba(167,139,250,.25);color:var(--text2);
-  cursor:pointer;transition:var(--transition);white-space:nowrap;font-style:italic}
+  cursor:pointer;transition:var(--transition);white-space:nowrap}
 .mood-pill:hover{border-color:rgba(167,139,250,.5);color:var(--accent2);border-style:solid;
   background:rgba(167,139,250,.06)}
 .mood-pill.active{border-style:solid;border-color:var(--accent2);color:var(--accent2);
@@ -2401,7 +2401,7 @@ document.getElementById('search').addEventListener('input',()=>{
 document.getElementById('mood-toggle').addEventListener('click',function(){
   const bar=document.getElementById('mood-bar');
   bar.classList.toggle('show');
-  this.textContent=bar.classList.contains('show')?'hide moods':'not sure what you need?';
+  this.innerHTML=bar.classList.contains('show')?'\u{1F914} hide moods':'\u{1F914} whats ur vibe?';
 });
 document.querySelectorAll('.mood-pill').forEach(pill=>{
   pill.addEventListener('click',()=>{
