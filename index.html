@@ -2385,9 +2385,17 @@ document.getElementById('roulette-btn').addEventListener('click',function(){
 /* ─── Filter / Search / Sort / View ────────────────────────────── */
 document.querySelectorAll('.pill').forEach(pill=>{
   pill.addEventListener('click',()=>{
+    const cat=pill.dataset.cat;
+    const deselect=(cat!=='all'&&currentFilter===cat);
     document.querySelectorAll('.pill').forEach(p=>{p.classList.remove('active');p.setAttribute('aria-selected','false')});
-    pill.classList.add('active');pill.setAttribute('aria-selected','true');
-    currentFilter=pill.dataset.cat;
+    if(deselect){
+      currentFilter='all';
+      document.querySelector('.pill[data-cat="all"]').classList.add('active');
+      document.querySelector('.pill[data-cat="all"]').setAttribute('aria-selected','true');
+    }else{
+      pill.classList.add('active');pill.setAttribute('aria-selected','true');
+      currentFilter=cat;
+    }
     currentMood=null;document.querySelectorAll('.mood-pill').forEach(m=>m.classList.remove('active'));
     renderCards();
   });
