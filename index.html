@@ -303,11 +303,14 @@ a:hover{text-decoration:underline}
   background:var(--bg3);border-radius:var(--radius-sm);font-size:.8rem;
   border:1px solid var(--glass-border);transition:var(--transition)}
 .pairs-section a:hover{border-color:var(--accent);text-decoration:none}
-.copy-btn{display:inline-flex;align-items:center;gap:6px;padding:.55rem 1.1rem;
-  background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);
-  font-size:.85rem;font-weight:600;cursor:pointer;transition:var(--transition)}
-.copy-btn:hover{background:var(--accent2);transform:translateY(-1px)}
-.copy-btn.copied{background:#22c55e}
+.copy-btn{display:inline-flex;align-items:center;gap:5px;padding:.3rem .75rem;
+  background:rgba(167,139,250,.1);color:var(--accent2);border:1px solid rgba(167,139,250,.25);
+  border-radius:20px;font-size:.7rem;font-weight:500;cursor:pointer;
+  transition:var(--transition);font-family:var(--font);margin-left:auto;white-space:nowrap;
+  flex-shrink:0}
+.copy-btn:hover{background:rgba(167,139,250,.2);border-color:rgba(167,139,250,.4);
+  transform:translateY(-1px)}
+.copy-btn.copied{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.3)}
 .prompt-preview{background:rgba(12,14,24,.95);border:1px solid var(--glass-border);
   border-radius:var(--radius-sm);padding:1rem 1.25rem;margin:.75rem 0 1rem;
   font-family:'SF Mono',Monaco,Consolas,'Courier New',monospace;font-size:.75rem;
@@ -2298,9 +2301,8 @@ function openModal(id){
     <h2>${p.name.toLowerCase()}</h2>
     <span class="card-tag" data-cat="${p.cat}">${CAT_LABELS[p.cat]}</span>
     <div class="meta-grid">${meta.map(m=>`<div class="meta-item"><label>${m.label}</label><p>${m.val}</p></div>`).join('')}</div>
-    ${full?`<div class="preview-label">full prompt</div><div class="prompt-preview">${highlightSyntax(full)}</div>`:''}
-    ${pairsHtml}
-    <button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">\u{1F4CB} copy prompt</button>`;
+    ${full?`<div class="preview-label">full prompt<button class="copy-btn" onclick="copyPromptInfo(this,'${p.id}')">\u{1F4CB} copy prompt</button></div><div class="prompt-preview">${highlightSyntax(full)}</div>`:''}
+    ${pairsHtml}`;
   const o=document.getElementById('modal-overlay');o.classList.add('show');
   document.body.style.overflow='hidden';
 }
