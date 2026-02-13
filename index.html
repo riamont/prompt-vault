@@ -87,7 +87,7 @@ a:hover{text-decoration:underline}
   vertical-align:text-bottom;animation:blink .7s infinite}
 @keyframes blink{50%{opacity:0}}
 .roulette-btn{display:inline-flex;align-items:center;gap:8px;
-  padding:.65rem 1.8rem;margin-top:2rem;
+  padding:.65rem 1.8rem;
   background:rgba(167,139,250,.06);backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
   border:1px solid rgba(167,139,250,.15);border-radius:50px;
@@ -112,13 +112,10 @@ a:hover{text-decoration:underline}
 .scroll-indicator svg{width:24px;height:24px;stroke:var(--text3);fill:none;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.5}
 
-/* ─── Stats Bar ────────────────────────────────────────────────── */
-.stats-bar{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;
-  padding:1.5rem 2rem;background:var(--bg2);border-top:1px solid var(--glass-border);
+/* ─── Action Bar ──────────────────────────────────────────────── */
+.action-bar{display:flex;flex-direction:column;align-items:center;gap:.75rem;
+  padding:1.25rem 2rem;background:var(--bg2);border-top:1px solid var(--glass-border);
   border-bottom:1px solid var(--glass-border)}
-.stat{text-align:center}
-.stat-num{font-size:1.5rem;font-weight:700;color:var(--accent2)}
-.stat-label{font-size:.75rem;color:var(--text3);letter-spacing:1px}
 
 /* ─── Controls ─────────────────────────────────────────────────── */
 .controls{position:sticky;top:0;z-index:100;background:rgba(12,14,24,.85);
@@ -157,8 +154,7 @@ a:hover{text-decoration:underline}
 .prompt-count{font-size:.78rem;color:var(--text3);white-space:nowrap}
 
 /* ─── Mood Filter ─────────────────────────────────────────────── */
-.mood-bar{max-width:1200px;margin:.5rem auto 0;padding:0 2rem;display:none;flex-wrap:wrap;gap:.4rem;
-  align-items:center}
+.mood-bar{display:none;flex-wrap:wrap;gap:.4rem;align-items:center;justify-content:center}
 .mood-bar.show{display:flex}
 .mood-label{font-size:.72rem;color:var(--text3);letter-spacing:.5px;margin-right:.25rem;white-space:nowrap}
 .mood-pill{padding:.35rem .75rem;border-radius:20px;font-size:.75rem;font-weight:400;
@@ -369,14 +365,14 @@ footer a{color:var(--accent2)}
   .mood-bar{justify-content:center;padding:0 1rem}
   .mood-toggle{text-align:center;width:100%}
   .card-grid{grid-template-columns:1fr}
-  .stats-bar{gap:1rem}
+  .action-bar{gap:.6rem}
   .featured-card{min-width:240px}
   .modal{padding:1.25rem;max-height:90vh}
 }
 @media(max-width:480px){
   .hero h1{font-size:1.8rem}
   .hero{min-height:40vh;padding:2.5rem 1.5rem 1.5rem}
-  .stats-bar{flex-direction:column;gap:.5rem}
+  .action-bar{flex-direction:column;gap:.5rem}
   .roulette-btn{padding:.55rem 1.4rem;font-size:.82rem}
 }
 </style>
@@ -410,22 +406,30 @@ footer a{color:var(--accent2)}
   <div class="hero-content">
     <h1>prompt vault</h1>
     <p class="tagline">a curated prompt library <span class="typed" id="typed-text"></span><span class="cursor"></span></p>
-    <button class="roulette-btn" id="roulette-btn">
-      <span class="roulette-icon">&#x1F3B2;</span>
-      <span class="roulette-text">prompt roulette</span>
-    </button>
     <div class="scroll-indicator">
       <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </div>
 </section>
 
-<!-- Stats Bar -->
-<div class="stats-bar" id="stats-bar">
-  <div class="stat"><div class="stat-num" data-target="4">0</div><div class="stat-label">categories</div></div>
-  <div class="stat"><div class="stat-num" data-target="17">0</div><div class="stat-label">prompts</div></div>
-  <div class="stat"><div class="stat-num" data-target="1">0</div><div class="stat-label">session</div></div>
-  <div class="stat"><div class="stat-num" data-target="0">0</div><div class="stat-label">lines written by hand</div></div>
+<!-- Action Bar -->
+<div class="action-bar">
+  <button class="roulette-btn" id="roulette-btn">
+    <span class="roulette-icon">&#x1F3B2;</span>
+    <span class="roulette-text">prompt roulette</span>
+  </button>
+  <button class="mood-toggle" id="mood-toggle">not sure what you need?</button>
+  <div class="mood-bar" id="mood-bar">
+    <span class="mood-label">i'm...</span>
+    <button class="mood-pill" data-mood="data">staring at a dataset</button>
+    <button class="mood-pill" data-mood="meeting">fresh out of a meeting</button>
+    <button class="mood-pill" data-mood="idea">sitting on a rough idea</button>
+    <button class="mood-pill" data-mood="write">trying to write something</button>
+    <button class="mood-pill" data-mood="stuck">feeling stuck</button>
+    <button class="mood-pill" data-mood="prompt">building a prompt</button>
+    <button class="mood-pill" data-mood="research">drowning in sources</button>
+    <button class="mood-pill" data-mood="learn">wanting to learn</button>
+  </div>
 </div>
 
 <!-- Controls -->
@@ -447,18 +451,6 @@ footer a{color:var(--accent2)}
       <button class="ctrl-btn" id="view-toggle" title="Toggle view">&#9638; grid</button>
     </div>
     <div class="prompt-count" id="prompt-count">showing 17 of 17 prompts</div>
-    <button class="mood-toggle" id="mood-toggle">not sure what you need?</button>
-  </div>
-  <div class="mood-bar" id="mood-bar">
-    <span class="mood-label">i'm...</span>
-    <button class="mood-pill" data-mood="data">staring at a dataset</button>
-    <button class="mood-pill" data-mood="meeting">fresh out of a meeting</button>
-    <button class="mood-pill" data-mood="idea">sitting on a rough idea</button>
-    <button class="mood-pill" data-mood="write">trying to write something</button>
-    <button class="mood-pill" data-mood="stuck">feeling stuck</button>
-    <button class="mood-pill" data-mood="prompt">building a prompt</button>
-    <button class="mood-pill" data-mood="research">drowning in sources</button>
-    <button class="mood-pill" data-mood="learn">wanting to learn</button>
   </div>
 </div>
 
@@ -2219,7 +2211,7 @@ window.addEventListener('load',()=>{
   setTimeout(()=>document.getElementById('vault-door').classList.add('open'),300);
   setTimeout(()=>{
     document.getElementById('loader').classList.add('hidden');
-    startTyping();animateStats();renderFeatured();renderCards();
+    startTyping();renderFeatured();renderCards();
   },1800);
 });
 
@@ -2240,23 +2232,6 @@ function startTyping(){
     setTimeout(tick,deleting?30:60);
   }
   tick();
-}
-
-/* ─── Stats Animation ──────────────────────────────────────────── */
-function animateStats(){
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting){
-      e.target.querySelectorAll('.stat-num').forEach(el=>{
-        const t=+el.dataset.target,dur=1200,start=performance.now();
-        (function tick(now){
-          const p=Math.min((now-start)/dur,1);
-          el.textContent=Math.round(p*t);
-          if(p<1)requestAnimationFrame(tick);
-        })(start);
-      });obs.unobserve(e.target);
-    }});
-  },{threshold:.5});
-  obs.observe(document.getElementById('stats-bar'));
 }
 
 /* ─── Render Featured ──────────────────────────────────────────── */
