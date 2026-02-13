@@ -2314,9 +2314,11 @@ document.getElementById('modal-overlay').addEventListener('click',e=>{if(e.targe
 function scrollToCard(id){
   closeModal();
   setTimeout(()=>{
-    currentFilter='all';
+    currentFilter='all';currentMood=null;
     document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
     document.querySelector('.pill[data-cat="all"]').classList.add('active');
+    document.querySelectorAll('.mood-pill').forEach(p=>p.classList.remove('active'));
+    const mb=document.getElementById('mood-bar');if(mb)mb.classList.remove('show');
     document.getElementById('search').value='';
     renderCards();
     const card=document.querySelector(`[data-id="${id}"]`);
