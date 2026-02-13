@@ -2601,9 +2601,11 @@ function copyPromptInfo(btn,id){
   });
 }
 function showToast(msg,type){
-  const t=document.getElementById('toast');t.textContent=msg;
-  t.classList.remove('success');
+  const t=document.getElementById('toast');
+  t.classList.remove('show','success');
+  t.textContent=msg;
   if(type==='success')t.classList.add('success');
+  void t.offsetWidth;
   t.classList.add('show');
   setTimeout(()=>{t.classList.remove('show','success');},3000);
 }
