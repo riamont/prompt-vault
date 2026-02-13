@@ -229,17 +229,25 @@ a:hover{text-decoration:underline}
 .builder-prompt .string{color:#6ee7b7}
 .builder-prompt .variable{color:#fbbf24}
 .builder-prompt .operator{color:#f472b6}
-.builder-blank{display:inline-block;min-width:140px;padding:.15rem .5rem;
-  background:rgba(167,139,250,.12);border:1px dashed rgba(167,139,250,.4);
-  border-radius:6px;color:var(--accent2);font-family:var(--font);font-size:.78rem;
+.builder-blank-wrap{display:block;margin:.75rem 0;padding:.6rem .75rem;
+  background:rgba(167,139,250,.04);border-radius:8px;
+  border-left:2px solid rgba(167,139,250,.25)}
+.builder-blank-label{display:block;font-family:var(--font);font-size:.65rem;
+  font-weight:600;letter-spacing:.5px;color:var(--accent2);margin-bottom:.3rem;
+  text-transform:uppercase}
+.builder-blank{display:block;width:100%;padding:.35rem .6rem;
+  background:rgba(167,139,250,.1);border:1px dashed rgba(167,139,250,.4);
+  border-radius:6px;color:var(--accent2);font-family:var(--font);font-size:.8rem;
   outline:none;transition:var(--transition);cursor:text;line-height:1.5;
-  vertical-align:baseline}
-.builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.4);
+  min-height:1.8em}
+.builder-blank:empty::before{content:attr(data-placeholder);color:rgba(167,139,250,.35);
   font-style:italic;pointer-events:none}
 .builder-blank:focus{border-style:solid;border-color:var(--accent2);
   background:rgba(167,139,250,.18);box-shadow:0 0 0 3px rgba(167,139,250,.12)}
 .builder-blank.filled{border-style:solid;border-color:rgba(34,197,94,.35);
   background:rgba(34,197,94,.08);color:#e2e8f0}
+.builder-blank-hint{display:block;font-family:var(--font);font-size:.68rem;
+  color:var(--text);margin-top:.3rem;opacity:.7}
 .builder-bottom{display:flex;align-items:center;justify-content:space-between;
   flex-wrap:wrap;gap:.75rem}
 .builder-progress{font-size:.72rem;color:var(--text3);letter-spacing:.3px}
@@ -2319,10 +2327,18 @@ const BUILDER_EXAMPLES={
   }
 };
 const BUILDER_BLANKS=[
-  {key:'topic',original:'{{topic/project}}',placeholder:'your topic or project'},
-  {key:'outcome',original:'{{specific outcome}}',placeholder:'desired outcome'},
-  {key:'audience',original:'{{audience or downstream use}}',placeholder:'audience or use'},
-  {key:'constraints',original:'{{deadlines, tone, format, tools, length, etc.}}',placeholder:'constraints'}
+  {key:'topic',original:'{{topic/project}}',label:'topic / project',
+    placeholder:'e.g., customer feedback analysis',
+    hint:'what are you working on or trying to explore?'},
+  {key:'outcome',original:'{{specific outcome}}',label:'desired outcome',
+    placeholder:'e.g., identify top 3 pain points with evidence',
+    hint:'what specific deliverable do you need?'},
+  {key:'audience',original:'{{audience or downstream use}}',label:'audience',
+    placeholder:'e.g., product team for sprint planning',
+    hint:'who will read or use the output?'},
+  {key:'constraints',original:'{{deadlines, tone, format, tools, length, etc.}}',label:'constraints',
+    placeholder:'e.g., under 2 pages, actionable recommendations',
+    hint:'any limits on length, tone, format, or tools?'}
 ];
 function buildPromptHTML(){
   let raw=FULL_PROMPTS['expert-prompt-gen']||'';
@@ -2335,10 +2351,14 @@ function buildPromptHTML(){
   });
   // Apply syntax highlighting
   let html=highlightSyntax(raw);
-  // Replace markers with contenteditable spans
+  // Replace markers with block-level editable blank areas
   Object.entries(markers).forEach(([marker,b])=>{
     html=html.replace(marker,
-      `<span class="builder-blank" contenteditable="true" data-key="${b.key}" data-placeholder="${b.placeholder}"></span>`);
+      `<span class="builder-blank-wrap">`+
+      `<span class="builder-blank-label">${b.label}</span>`+
+      `<span class="builder-blank" contenteditable="true" data-key="${b.key}" data-placeholder="${b.placeholder}"></span>`+
+      `<span class="builder-blank-hint">${b.hint}</span>`+
+      `</span>`);
   });
   return html;
 }
